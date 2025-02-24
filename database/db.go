@@ -7,7 +7,17 @@ import (
 
 type User struct {
 	gorm.Model
-	Name string
+	Name         string
+	ShareGroupID int
+	ShareGroup   ShareGroup
+}
+
+type ShareGroup struct {
+	gorm.Model
+	LinkKey     string
+	DestLng     float64
+	DestLat     float64
+	MeetingTime string
 }
 
 func GetDB() *gorm.DB {

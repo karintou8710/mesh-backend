@@ -9,6 +9,7 @@ import (
 
 	"main/database"
 	pb "main/go_protocol_buffer"
+	cruds "main/server/crud"
 
 	"github.com/golang-jwt/jwt/v5"
 	"google.golang.org/grpc"
@@ -51,8 +52,16 @@ func (s *server) CreateShareGroup(ctx context.Context, req *pb.CreateShareGroupR
 ) {
 	claims := Auth(ctx)
 	userId := claims["ist"]
+	db := database.GetDB()
 
-	return nil, nil
+	shareGroup, err := cruds.CreateShareGroup(db, req.DestLng, req.DestLat, req.MeetingTime)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(userId)
+
+	return shareGroup, nil
 }
 
 func main() {
