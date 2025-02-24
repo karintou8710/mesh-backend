@@ -23,5 +23,5 @@ func main() {
 		log.Fatalf("Failed to call SayHello: %v", err)
 	}
 
-	log.Printf("Response: %v", response.User)
+	log.Printf("Response: %v, %v", response.User, response.AccessToken)
 }
