@@ -16,7 +16,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := pb.NewHelloServiceClient(conn)
+	client := pb.NewServiceClient(conn)
 
 	response, err := client.AnonymousSignUp(context.Background(), &pb.AnonymousSignUpRequest{Name: "TestUser"})
 	if err != nil {

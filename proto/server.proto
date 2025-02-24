@@ -27,6 +27,6 @@ message AnonymousSignUpResponse {
     string accessToken = 2;
 }
 
-service HelloService {
+service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
 }

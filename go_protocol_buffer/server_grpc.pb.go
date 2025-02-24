@@ -18,86 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// HelloServiceClient is the client API for HelloService service.
+// ServiceClient is the client API for Service service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type HelloServiceClient interface {
+type ServiceClient interface {
 	AnonymousSignUp(ctx context.Context, in *AnonymousSignUpRequest, opts ...grpc.CallOption) (*AnonymousSignUpResponse, error)
 }
 
-type helloServiceClient struct {
+type serviceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewHelloServiceClient(cc grpc.ClientConnInterface) HelloServiceClient {
-	return &helloServiceClient{cc}
+func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
+	return &serviceClient{cc}
 }
 
-func (c *helloServiceClient) AnonymousSignUp(ctx context.Context, in *AnonymousSignUpRequest, opts ...grpc.CallOption) (*AnonymousSignUpResponse, error) {
+func (c *serviceClient) AnonymousSignUp(ctx context.Context, in *AnonymousSignUpRequest, opts ...grpc.CallOption) (*AnonymousSignUpResponse, error) {
 	out := new(AnonymousSignUpResponse)
-	err := c.cc.Invoke(ctx, "/Server.HelloService/AnonymousSignUp", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Server.Service/AnonymousSignUp", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// HelloServiceServer is the server API for HelloService service.
-// All implementations must embed UnimplementedHelloServiceServer
+// ServiceServer is the server API for Service service.
+// All implementations must embed UnimplementedServiceServer
 // for forward compatibility
-type HelloServiceServer interface {
+type ServiceServer interface {
 	AnonymousSignUp(context.Context, *AnonymousSignUpRequest) (*AnonymousSignUpResponse, error)
-	mustEmbedUnimplementedHelloServiceServer()
+	mustEmbedUnimplementedServiceServer()
 }
 
-// UnimplementedHelloServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedHelloServiceServer struct {
+// UnimplementedServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedHelloServiceServer) AnonymousSignUp(context.Context, *AnonymousSignUpRequest) (*AnonymousSignUpResponse, error) {
+func (UnimplementedServiceServer) AnonymousSignUp(context.Context, *AnonymousSignUpRequest) (*AnonymousSignUpResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AnonymousSignUp not implemented")
 }
-func (UnimplementedHelloServiceServer) mustEmbedUnimplementedHelloServiceServer() {}
+func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
-// UnsafeHelloServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to HelloServiceServer will
+// UnsafeServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ServiceServer will
 // result in compilation errors.
-type UnsafeHelloServiceServer interface {
-	mustEmbedUnimplementedHelloServiceServer()
+type UnsafeServiceServer interface {
+	mustEmbedUnimplementedServiceServer()
 }
 
-func RegisterHelloServiceServer(s grpc.ServiceRegistrar, srv HelloServiceServer) {
-	s.RegisterService(&HelloService_ServiceDesc, srv)
+func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
+	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _HelloService_AnonymousSignUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_AnonymousSignUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AnonymousSignUpRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(HelloServiceServer).AnonymousSignUp(ctx, in)
+		return srv.(ServiceServer).AnonymousSignUp(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Server.HelloService/AnonymousSignUp",
+		FullMethod: "/Server.Service/AnonymousSignUp",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HelloServiceServer).AnonymousSignUp(ctx, req.(*AnonymousSignUpRequest))
+		return srv.(ServiceServer).AnonymousSignUp(ctx, req.(*AnonymousSignUpRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// HelloService_ServiceDesc is the grpc.ServiceDesc for HelloService service.
+// Service_ServiceDesc is the grpc.ServiceDesc for Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var HelloService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Server.HelloService",
-	HandlerType: (*HelloServiceServer)(nil),
+var Service_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "Server.Service",
+	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AnonymousSignUp",
-			Handler:    _HelloService_AnonymousSignUp_Handler,
+			Handler:    _Service_AnonymousSignUp_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

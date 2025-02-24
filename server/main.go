@@ -15,7 +15,7 @@ import (
 )
 
 type server struct {
-	pb.UnimplementedHelloServiceServer
+	pb.UnimplementedServiceServer
 }
 
 func (s *server) AnonymousSignUp(ctx context.Context, req *pb.AnonymousSignUpRequest) (*pb.AnonymousSignUpResponse, error) {
@@ -53,7 +53,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterHelloServiceServer(grpcServer, &server{})
+	pb.RegisterServiceServer(grpcServer, &server{})
 	fmt.Println("Server is running on port: 8080")
 
 	if err := grpcServer.Serve(listener); err != nil {
