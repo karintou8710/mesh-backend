@@ -5,7 +5,7 @@ package Server;
 option go_package = "./go_protocol_buffer";
 
 message ShareGroup {
-    string id = 1;
+    uint64 id = 1;
     string linkId = 2;
     double destLng = 3;
     double destLat = 4;
@@ -13,7 +13,7 @@ message ShareGroup {
   }
 
 message User {
-    string id = 1;
+    uint64 id = 1;
     string name = 2;
     ShareGroup shareGroup = 3;
 }
