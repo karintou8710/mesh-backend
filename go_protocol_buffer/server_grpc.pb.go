@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v5.27.1
-// source: proto/hello.proto
+// source: proto/server.proto
 
 package go_protocol_buffer
 
@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type HelloServiceClient interface {
-	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error)
+	AnonymousSignUp(ctx context.Context, in *AnonymousSignUpRequest, opts ...grpc.CallOption) (*AnonymousSignUpResponse, error)
 }
 
 type helloServiceClient struct {
@@ -33,9 +33,9 @@ func NewHelloServiceClient(cc grpc.ClientConnInterface) HelloServiceClient {
 	return &helloServiceClient{cc}
 }
 
-func (c *helloServiceClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error) {
-	out := new(HelloResponse)
-	err := c.cc.Invoke(ctx, "/Hello.HelloService/SayHello", in, out, opts...)
+func (c *helloServiceClient) AnonymousSignUp(ctx context.Context, in *AnonymousSignUpRequest, opts ...grpc.CallOption) (*AnonymousSignUpResponse, error) {
+	out := new(AnonymousSignUpResponse)
+	err := c.cc.Invoke(ctx, "/Server.HelloService/AnonymousSignUp", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *helloServiceClient) SayHello(ctx context.Context, in *HelloRequest, opt
 // All implementations must embed UnimplementedHelloServiceServer
 // for forward compatibility
 type HelloServiceServer interface {
-	SayHello(context.Context, *HelloRequest) (*HelloResponse, error)
+	AnonymousSignUp(context.Context, *AnonymousSignUpRequest) (*AnonymousSignUpResponse, error)
 	mustEmbedUnimplementedHelloServiceServer()
 }
 
@@ -54,8 +54,8 @@ type HelloServiceServer interface {
 type UnimplementedHelloServiceServer struct {
 }
 
-func (UnimplementedHelloServiceServer) SayHello(context.Context, *HelloRequest) (*HelloResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (UnimplementedHelloServiceServer) AnonymousSignUp(context.Context, *AnonymousSignUpRequest) (*AnonymousSignUpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AnonymousSignUp not implemented")
 }
 func (UnimplementedHelloServiceServer) mustEmbedUnimplementedHelloServiceServer() {}
 
@@ -70,20 +70,20 @@ func RegisterHelloServiceServer(s grpc.ServiceRegistrar, srv HelloServiceServer)
 	s.RegisterService(&HelloService_ServiceDesc, srv)
 }
 
-func _HelloService_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloRequest)
+func _HelloService_AnonymousSignUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AnonymousSignUpRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(HelloServiceServer).SayHello(ctx, in)
+		return srv.(HelloServiceServer).AnonymousSignUp(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Hello.HelloService/SayHello",
+		FullMethod: "/Server.HelloService/AnonymousSignUp",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HelloServiceServer).SayHello(ctx, req.(*HelloRequest))
+		return srv.(HelloServiceServer).AnonymousSignUp(ctx, req.(*AnonymousSignUpRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -92,14 +92,14 @@ func _HelloService_SayHello_Handler(srv interface{}, ctx context.Context, dec fu
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var HelloService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Hello.HelloService",
+	ServiceName: "Server.HelloService",
 	HandlerType: (*HelloServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _HelloService_SayHello_Handler,
+			MethodName: "AnonymousSignUp",
+			Handler:    _HelloService_AnonymousSignUp_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/hello.proto",
+	Metadata: "proto/server.proto",
 }

@@ -18,10 +18,10 @@ func main() {
 
 	client := pb.NewHelloServiceClient(conn)
 
-	response, err := client.SayHello(context.Background(), &pb.HelloRequest{Name: "World"})
+	response, err := client.AnonymousSignUp(context.Background(), &pb.AnonymousSignUpRequest{Name: "TestUser"})
 	if err != nil {
 		log.Fatalf("Failed to call SayHello: %v", err)
 	}
 
-	log.Printf("Response: %v", response.GetMessage())
+	log.Printf("Response: %v", response.AccessToken)
 }

@@ -15,9 +15,9 @@ type server struct {
 	pb.UnimplementedHelloServiceServer
 }
 
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloResponse, error) {
-	log.Printf("Received: %v", in.GetName())
-	return &pb.HelloResponse{Message: "Hello " + in.GetName()}, nil
+func (s *server) AnonymousSignUp(ctx context.Context, req *pb.AnonymousSignUpRequest) (*pb.AnonymousSignUpResponse, error) {
+	log.Printf("Received: %v", req.GetName())
+	return &pb.AnonymousSignUpResponse{}, nil
 }
 
 func main() {

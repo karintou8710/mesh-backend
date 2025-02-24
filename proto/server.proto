@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package Server;
+
+option go_package = "./go_protocol_buffer";
+
+message ShareGroup {
+    string id = 1;
+    string linkId = 2;
+    double destLng = 3;
+    double destLat = 4;
+    repeated User users = 5;
+  }
+
+message User {
+    string id = 1;
+    string name = 2;
+    ShareGroup shareGroup = 3;
+}
+
+message AnonymousSignUpRequest {
+    string name = 1;
+}
+
+message AnonymousSignUpResponse {
+    User user = 1;
+    string accessToken = 2;
+}
+
+service HelloService {
+    rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
+}
