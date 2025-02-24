@@ -46,6 +46,15 @@ func (s *server) AnonymousSignUp(ctx context.Context, req *pb.AnonymousSignUpReq
 	return &response, nil
 }
 
+func (s *server) CreateShareGroup(ctx context.Context, req *pb.CreateShareGroupRequest) (
+	*pb.CreateShareGroupResponse, error,
+) {
+	claims := Auth(ctx)
+	userId := claims["ist"]
+
+	return nil, nil
+}
+
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
