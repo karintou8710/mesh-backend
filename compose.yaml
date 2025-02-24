@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:17.0
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - db-store:/var/lib/postgresql/data
+
+volumes:
+  db-store:
