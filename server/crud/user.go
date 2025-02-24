@@ -22,3 +22,16 @@ func GetUserById(db *gorm.DB, userId int) *database.User {
 
 	return &user
 }
+
+func CreateUser(db *gorm.DB, name string) (
+	*database.User, error,
+) {
+	user := database.User{Name: name}
+
+	if res := db.Create(&user); res.Error != nil {
+		log.Fatalf("Error: %v", res.Error)
+		return nil, res.Error
+	}
+
+	return &user, nil
+}

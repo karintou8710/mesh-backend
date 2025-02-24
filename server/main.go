@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
 
 	"main/database"
 	pb "main/go_protocol_buffer"
 	cruds "main/server/crud"
 
-	"github.com/golang-jwt/jwt/v5"
 	"google.golang.org/grpc"
 )
 
@@ -22,21 +20,13 @@ type server struct {
 func (s *server) AnonymousSignUp(ctx context.Context, req *pb.AnonymousSignUpRequest) (*pb.AnonymousSignUpResponse, error) {
 	db := database.GetDB()
 
-	user := database.User{Name: req.Name}
-	if res := db.Create(&user); res.Error != nil {
-		log.Fatalf("Error: %v", res.Error)
-		return nil, res.Error
+	user, err := cruds.CreateUser(db, req.Name)
+	if err != nil {
+		return nil, err
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.ID,
-		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Hour * 24 * 365).Unix(),
-	})
-
-	accessToken, err := token.SignedString([]byte("secret"))
+	accessToken, err := BuildAccessToken(user.ID)
 	if err != nil {
-		log.Fatalf("Error: %v", err)
 		return nil, err
 	}
 
