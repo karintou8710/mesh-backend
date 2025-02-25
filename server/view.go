@@ -10,7 +10,12 @@ func UserMapper(user *database.User) *pb.User {
 		return nil
 	}
 
-	return &pb.User{Id: uint64(user.ID), Name: user.Name, ShareGroup: ShareGroupMapper(&user.ShareGroup)}
+	return &pb.User{
+		Id:           uint64(user.ID),
+		Name:         user.Name,
+		ShareGroup:   ShareGroupMapper(&user.ShareGroup),
+		ShareGroupId: uint64(user.ShareGroup.ID),
+	}
 }
 
 func UserListMapper(users []database.User) []*pb.User {
