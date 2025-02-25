@@ -25,6 +25,7 @@ type ServiceClient interface {
 	AnonymousSignUp(ctx context.Context, in *AnonymousSignUpRequest, opts ...grpc.CallOption) (*AnonymousSignUpResponse, error)
 	CreateShareGroup(ctx context.Context, in *CreateShareGroupRequest, opts ...grpc.CallOption) (*CreateShareGroupResponse, error)
 	JoinShareGroup(ctx context.Context, in *JoinShareGroupRequest, opts ...grpc.CallOption) (*JoinShareGroupResponse, error)
+	GetCurrentShareGroup(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (*GetCurrentShareGroupResponse, error)
 }
 
 type serviceClient struct {
@@ -62,6 +63,15 @@ func (c *serviceClient) JoinShareGroup(ctx context.Context, in *JoinShareGroupRe
 	return out, nil
 }
 
+func (c *serviceClient) GetCurrentShareGroup(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (*GetCurrentShareGroupResponse, error) {
+	out := new(GetCurrentShareGroupResponse)
+	err := c.cc.Invoke(ctx, "/Server.Service/GetCurrentShareGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServiceServer is the server API for Service service.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type ServiceServer interface {
 	AnonymousSignUp(context.Context, *AnonymousSignUpRequest) (*AnonymousSignUpResponse, error)
 	CreateShareGroup(context.Context, *CreateShareGroupRequest) (*CreateShareGroupResponse, error)
 	JoinShareGroup(context.Context, *JoinShareGroupRequest) (*JoinShareGroupResponse, error)
+	GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedServiceServer) CreateShareGroup(context.Context, *CreateShare
 }
 func (UnimplementedServiceServer) JoinShareGroup(context.Context, *JoinShareGroupRequest) (*JoinShareGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method JoinShareGroup not implemented")
+}
+func (UnimplementedServiceServer) GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentShareGroup not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -152,6 +166,24 @@ func _Service_JoinShareGroup_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_GetCurrentShareGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCurrentShareGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).GetCurrentShareGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server.Service/GetCurrentShareGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).GetCurrentShareGroup(ctx, req.(*GetCurrentShareGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Service_ServiceDesc is the grpc.ServiceDesc for Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "JoinShareGroup",
 			Handler:    _Service_JoinShareGroup_Handler,
+		},
+		{
+			MethodName: "GetCurrentShareGroup",
+			Handler:    _Service_GetCurrentShareGroup_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

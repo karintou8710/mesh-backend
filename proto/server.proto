@@ -48,8 +48,17 @@ message JoinShareGroupResponse {
     ShareGroup shareGroup = 1;
 }
 
+message GetCurrentShareGroupRequest {
+    string groupId = 1;
+}
+
+message GetCurrentShareGroupResponse {
+    ShareGroup shareGroup = 1;
+}
+
 service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
     rpc JoinShareGroup (JoinShareGroupRequest) returns (JoinShareGroupResponse);
+    rpc GetCurrentShareGroup (GetCurrentShareGroupRequest) returns (GetCurrentShareGroupResponse);
 }

@@ -10,7 +10,7 @@ import (
 
 func GetUserById(db *gorm.DB, userId int) *database.User {
 	var user database.User
-	res := db.First(&user, userId)
+	res := db.Preload("ShareGroup").First(&user, userId)
 
 	if res.Error != nil {
 		if !errors.Is(res.Error, gorm.ErrRecordNotFound) {

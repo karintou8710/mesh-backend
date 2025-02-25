@@ -9,7 +9,7 @@ type User struct {
 	gorm.Model
 	Name         string
 	ShareGroupID *uint64
-	ShareGroup   ShareGroup
+	ShareGroup   *ShareGroup
 }
 
 type ShareGroup struct {
@@ -18,7 +18,7 @@ type ShareGroup struct {
 	DestLng     float64
 	DestLat     float64
 	MeetingTime string
-	Users       []User
+	Users       []*User
 }
 
 func GetDB() *gorm.DB {

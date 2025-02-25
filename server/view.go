@@ -14,16 +14,16 @@ func UserMapper(user *database.User) *pb.User {
 	return &pb.User{
 		Id:           uint64(user.ID),
 		Name:         user.Name,
-		ShareGroup:   ShareGroupMapper(&user.ShareGroup),
-		ShareGroupId: uint64(user.ShareGroup.ID),
+		ShareGroup:   ShareGroupMapper(user.ShareGroup),
+		ShareGroupId: uint64(*user.ShareGroupID),
 	}
 }
 
-func UserListMapper(users []database.User) []*pb.User {
+func UserListMapper(users []*database.User) []*pb.User {
 	viewUsers := []*pb.User{}
 
 	for _, user := range users {
-		viewUsers = append(viewUsers, UserMapper(&user))
+		viewUsers = append(viewUsers, UserMapper(user))
 	}
 
 	return viewUsers
@@ -59,6 +59,12 @@ func CreateShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.CreateS
 
 func JoinShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.JoinShareGroupResponse {
 	return &pb.JoinShareGroupResponse{
+		ShareGroup: ShareGroupMapper(shareGroup),
+	}
+}
+
+func GetCurrentShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.GetCurrentShareGroupResponse {
+	return &pb.GetCurrentShareGroupResponse{
 		ShareGroup: ShareGroupMapper(shareGroup),
 	}
 }
