@@ -59,12 +59,12 @@ message GetCurrentShareGroupResponse {
     ShareGroup shareGroup = 1;
 }
 
-message UpdatePositionGroupRequest {
+message UpdatePositionRequest {
     double lat = 1;
     double lon = 2;
 }
 
-message UpdatePositionGroupResponse {
+message UpdatePositionResponse {
     User user = 1;
 }
 
@@ -79,6 +79,6 @@ service Service {
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
     rpc JoinShareGroup (JoinShareGroupRequest) returns (JoinShareGroupResponse);
     rpc GetCurrentShareGroup (GetCurrentShareGroupRequest) returns (GetCurrentShareGroupResponse);
-    rpc UpdatePosition (UpdatePositionGroupRequest) returns (UpdatePositionGroupResponse);
+    rpc UpdatePosition (UpdatePositionRequest) returns (UpdatePositionResponse);
     rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserResponse);
 }

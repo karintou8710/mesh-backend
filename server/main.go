@@ -100,8 +100,8 @@ func (s *server) GetCurrentShareGroup(ctx context.Context, req *pb.GetCurrentSha
 	return GetCurrentShareGroupResponseMapper(shareGroup), nil
 }
 
-func (s *server) UpdatePosition(ctx context.Context, req *pb.UpdatePositionGroupRequest) (
-	*pb.UpdatePositionGroupResponse, error,
+func (s *server) UpdatePosition(ctx context.Context, req *pb.UpdatePositionRequest) (
+	*pb.UpdatePositionResponse, error,
 ) {
 	db := database.GetDB()
 

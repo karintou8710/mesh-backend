@@ -26,7 +26,7 @@ type ServiceClient interface {
 	CreateShareGroup(ctx context.Context, in *CreateShareGroupRequest, opts ...grpc.CallOption) (*CreateShareGroupResponse, error)
 	JoinShareGroup(ctx context.Context, in *JoinShareGroupRequest, opts ...grpc.CallOption) (*JoinShareGroupResponse, error)
 	GetCurrentShareGroup(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (*GetCurrentShareGroupResponse, error)
-	UpdatePosition(ctx context.Context, in *UpdatePositionGroupRequest, opts ...grpc.CallOption) (*UpdatePositionGroupResponse, error)
+	UpdatePosition(ctx context.Context, in *UpdatePositionRequest, opts ...grpc.CallOption) (*UpdatePositionResponse, error)
 	GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error)
 }
 
@@ -74,8 +74,8 @@ func (c *serviceClient) GetCurrentShareGroup(ctx context.Context, in *GetCurrent
 	return out, nil
 }
 
-func (c *serviceClient) UpdatePosition(ctx context.Context, in *UpdatePositionGroupRequest, opts ...grpc.CallOption) (*UpdatePositionGroupResponse, error) {
-	out := new(UpdatePositionGroupResponse)
+func (c *serviceClient) UpdatePosition(ctx context.Context, in *UpdatePositionRequest, opts ...grpc.CallOption) (*UpdatePositionResponse, error) {
+	out := new(UpdatePositionResponse)
 	err := c.cc.Invoke(ctx, "/Server.Service/UpdatePosition", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ type ServiceServer interface {
 	CreateShareGroup(context.Context, *CreateShareGroupRequest) (*CreateShareGroupResponse, error)
 	JoinShareGroup(context.Context, *JoinShareGroupRequest) (*JoinShareGroupResponse, error)
 	GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error)
-	UpdatePosition(context.Context, *UpdatePositionGroupRequest) (*UpdatePositionGroupResponse, error)
+	UpdatePosition(context.Context, *UpdatePositionRequest) (*UpdatePositionResponse, error)
 	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -121,7 +121,7 @@ func (UnimplementedServiceServer) JoinShareGroup(context.Context, *JoinShareGrou
 func (UnimplementedServiceServer) GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentShareGroup not implemented")
 }
-func (UnimplementedServiceServer) UpdatePosition(context.Context, *UpdatePositionGroupRequest) (*UpdatePositionGroupResponse, error) {
+func (UnimplementedServiceServer) UpdatePosition(context.Context, *UpdatePositionRequest) (*UpdatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePosition not implemented")
 }
 func (UnimplementedServiceServer) GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error) {
@@ -213,7 +213,7 @@ func _Service_GetCurrentShareGroup_Handler(srv interface{}, ctx context.Context,
 }
 
 func _Service_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdatePositionGroupRequest)
+	in := new(UpdatePositionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -225,7 +225,7 @@ func _Service_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/Server.Service/UpdatePosition",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).UpdatePosition(ctx, req.(*UpdatePositionGroupRequest))
+		return srv.(ServiceServer).UpdatePosition(ctx, req.(*UpdatePositionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
