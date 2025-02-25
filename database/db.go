@@ -1,6 +1,8 @@
 package database
 
 import (
+	"time"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -10,6 +12,9 @@ type User struct {
 	Name         string
 	ShareGroupID *uint64
 	ShareGroup   *ShareGroup
+	Lat          *float64
+	Lon          *float64
+	PositionAt   *time.Time
 }
 
 type ShareGroup struct {

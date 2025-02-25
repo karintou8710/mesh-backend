@@ -11,12 +11,26 @@ func UserMapper(user *database.User) *pb.User {
 		return nil
 	}
 
-	return &pb.User{
-		Id:           uint64(user.ID),
-		Name:         user.Name,
-		ShareGroup:   ShareGroupMapper(user.ShareGroup),
-		ShareGroupId: uint64(*user.ShareGroupID),
+	viewUser := &pb.User{
+		Id:         uint64(user.ID),
+		Name:       user.Name,
+		ShareGroup: ShareGroupMapper(user.ShareGroup),
 	}
+	if user.Lat != nil {
+		viewUser.Lat = *user.Lat
+	}
+	if user.Lon != nil {
+		viewUser.Lon = *user.Lon
+	}
+	if user.PositionAt != nil {
+		viewUser.PositionAt = (*user.PositionAt).String()
+	}
+	if user.ShareGroupID != nil {
+		viewUser.ShareGroupId = *user.ShareGroupID
+	}
+	viewUser.ShareGroup = ShareGroupMapper(user.ShareGroup)
+
+	return viewUser
 }
 
 func UserListMapper(users []*database.User) []*pb.User {
