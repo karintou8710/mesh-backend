@@ -28,6 +28,7 @@ type ServiceClient interface {
 	GetCurrentShareGroup(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (*GetCurrentShareGroupResponse, error)
 	UpdatePosition(ctx context.Context, in *UpdatePositionRequest, opts ...grpc.CallOption) (*UpdatePositionResponse, error)
 	GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error)
+	LeaveShareGroup(ctx context.Context, in *LeaveShareGroupRequest, opts ...grpc.CallOption) (*LeaveShareGroupResponse, error)
 }
 
 type serviceClient struct {
@@ -92,6 +93,15 @@ func (c *serviceClient) GetCurrentUser(ctx context.Context, in *GetCurrentUserRe
 	return out, nil
 }
 
+func (c *serviceClient) LeaveShareGroup(ctx context.Context, in *LeaveShareGroupRequest, opts ...grpc.CallOption) (*LeaveShareGroupResponse, error) {
+	out := new(LeaveShareGroupResponse)
+	err := c.cc.Invoke(ctx, "/Server.Service/LeaveShareGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServiceServer is the server API for Service service.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type ServiceServer interface {
 	GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error)
 	UpdatePosition(context.Context, *UpdatePositionRequest) (*UpdatePositionResponse, error)
 	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error)
+	LeaveShareGroup(context.Context, *LeaveShareGroupRequest) (*LeaveShareGroupResponse, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedServiceServer) UpdatePosition(context.Context, *UpdatePositio
 }
 func (UnimplementedServiceServer) GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentUser not implemented")
+}
+func (UnimplementedServiceServer) LeaveShareGroup(context.Context, *LeaveShareGroupRequest) (*LeaveShareGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeaveShareGroup not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -248,6 +262,24 @@ func _Service_GetCurrentUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_LeaveShareGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveShareGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).LeaveShareGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server.Service/LeaveShareGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).LeaveShareGroup(ctx, req.(*LeaveShareGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Service_ServiceDesc is the grpc.ServiceDesc for Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCurrentUser",
 			Handler:    _Service_GetCurrentUser_Handler,
+		},
+		{
+			MethodName: "LeaveShareGroup",
+			Handler:    _Service_LeaveShareGroup_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

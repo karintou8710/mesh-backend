@@ -74,6 +74,12 @@ message GetCurrentUserResponse {
     User user = 1;
 }
 
+message LeaveShareGroupRequest {}
+
+message LeaveShareGroupResponse {
+    User user = 1;
+}
+
 service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
@@ -81,4 +87,5 @@ service Service {
     rpc GetCurrentShareGroup (GetCurrentShareGroupRequest) returns (GetCurrentShareGroupResponse);
     rpc UpdatePosition (UpdatePositionRequest) returns (UpdatePositionResponse);
     rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserResponse);
+    rpc LeaveShareGroup (LeaveShareGroupRequest) returns (LeaveShareGroupResponse);
 }

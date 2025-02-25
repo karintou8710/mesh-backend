@@ -94,3 +94,9 @@ func GetCurrentUserResponseMapper(user *database.User) *pb.GetCurrentUserRespons
 		User: UserMapper(user),
 	}
 }
+
+func LeaveShareGroupResponseMapper(user *database.User) *pb.LeaveShareGroupResponse {
+	return &pb.LeaveShareGroupResponse{
+		User: UserMapper(user),
+	}
+}

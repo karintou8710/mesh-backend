@@ -130,6 +130,25 @@ func (s *server) GetCurrentUser(ctx context.Context, req *pb.GetCurrentUserReque
 	return GetCurrentUserResponseMapper(user), nil
 }
 
+func (s *server) LeaveShareGroup(ctx context.Context, req *pb.LeaveShareGroupRequest) (
+	*pb.LeaveShareGroupResponse, error,
+) {
+	db := database.GetDB()
+
+	user := Auth(ctx)
+	if user == nil {
+		return nil, fmt.Errorf("error: need to authenticate")
+	}
+
+	user, err := cruds.LeaveShareGroup(db, user)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return LeaveShareGroupResponseMapper(user), nil
+}
+
 func main() {
 	LoadEnv()
 
