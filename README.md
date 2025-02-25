@@ -6,6 +6,7 @@
 
 ```bash
 $ docker compose up
-$ go run ./scripts/migrate/main.go
-$ go run ./server/*.go
+
+# 初回はマイグレーションを実行する
+$ docker compose exec app go run /app/scripts/migrate/main.go
 ```
