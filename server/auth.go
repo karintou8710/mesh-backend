@@ -6,14 +6,12 @@ import (
 	"log"
 	"main/database"
 	cruds "main/server/crud"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"google.golang.org/grpc/metadata"
 )
-
-// TODO: 後で環境変数に置き換える
-var SECRET = []byte("secret")
 
 func GetTokenFromMD(md metadata.MD) string {
 	tokenStringList := md.Get("token")
@@ -31,7 +29,7 @@ func BuildAccessToken(sub uint) (string, error) {
 		"exp": time.Now().Add(time.Hour * 24 * 365).Unix(), // 365日
 	})
 
-	accessToken, err := token.SignedString(SECRET)
+	accessToken, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 	if err != nil {
 		log.Printf("error: %v\n", err)
 		return "", err
@@ -60,7 +58,7 @@ func Auth(ctx context.Context) *database.User {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return SECRET, nil
+		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
 
 	if err != nil {

@@ -131,6 +131,8 @@ func (s *server) GetCurrentUser(ctx context.Context, req *pb.GetCurrentUserReque
 }
 
 func main() {
+	LoadEnv()
+
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		log.Fatalf("Error: %v", err)
