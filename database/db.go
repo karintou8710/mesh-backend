@@ -20,7 +20,7 @@ type User struct {
 type ShareGroup struct {
 	gorm.Model
 	LinkKey     string
-	DestLng     float64
+	DestLon     float64
 	DestLat     float64
 	MeetingTime string
 	Users       []*User

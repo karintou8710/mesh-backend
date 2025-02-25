@@ -43,7 +43,7 @@ func (s *server) CreateShareGroup(ctx context.Context, req *pb.CreateShareGroupR
 		return nil, fmt.Errorf("error: need to authenticate")
 	}
 
-	shareGroup, err := cruds.CreateShareGroup(db, req.DestLng, req.DestLat, req.MeetingTime)
+	shareGroup, err := cruds.CreateShareGroup(db, req.DestLon, req.DestLat, req.MeetingTime)
 	if err != nil {
 		log.Println(err)
 		return nil, err

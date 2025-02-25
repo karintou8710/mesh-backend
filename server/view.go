@@ -50,7 +50,7 @@ func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
 
 	return &pb.ShareGroup{
 		Id:          uint64(shareGroup.ID),
-		DestLng:     shareGroup.DestLng,
+		DestLon:     shareGroup.DestLon,
 		DestLat:     shareGroup.DestLat,
 		LinkKey:     shareGroup.LinkKey,
 		MeetingTime: shareGroup.MeetingTime,
