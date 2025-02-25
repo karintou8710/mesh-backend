@@ -49,7 +49,8 @@ func CreateShareGroup(db *gorm.DB, destLng float64, destLat float64, meetingTime
 func JoinShareGroup(db *gorm.DB, shareGroup *database.ShareGroup, user *database.User) (
 	*database.ShareGroup, error,
 ) {
-	user.ShareGroupID = int(shareGroup.ID)
+	shareGroupdId := uint64(shareGroup.ID)
+	user.ShareGroupID = &shareGroupdId
 
 	if res := db.Save(&user); res.Error != nil {
 		log.Printf("Error: %v\n", res.Error)

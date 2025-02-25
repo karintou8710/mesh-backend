@@ -56,3 +56,9 @@ func CreateShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.CreateS
 		ShareGroup: ShareGroupMapper(shareGroup),
 	}
 }
+
+func JoinShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.JoinShareGroupResponse {
+	return &pb.JoinShareGroupResponse{
+		ShareGroup: ShareGroupMapper(shareGroup),
+	}
+}

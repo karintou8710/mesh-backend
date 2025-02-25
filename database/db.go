@@ -8,7 +8,7 @@ import (
 type User struct {
 	gorm.Model
 	Name         string
-	ShareGroupID int
+	ShareGroupID *uint64
 	ShareGroup   ShareGroup
 }
 

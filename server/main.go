@@ -58,6 +58,30 @@ func (s *server) CreateShareGroup(ctx context.Context, req *pb.CreateShareGroupR
 	return CreateShareGroupResponseMapper(shareGroup), nil
 }
 
+func (s *server) JoinShareGroup(ctx context.Context, req *pb.JoinShareGroupRequest) (
+	*pb.JoinShareGroupResponse, error,
+) {
+	db := database.GetDB()
+
+	user := Auth(ctx)
+	if user == nil {
+		return nil, fmt.Errorf("error: need to authenticate")
+	}
+
+	shareGroup := cruds.GetShareGroupByLinkKey(db, req.LinkKey)
+	if shareGroup == nil {
+		return nil, fmt.Errorf("error: the linkKey is invalid")
+	}
+
+	shareGroup, err := cruds.JoinShareGroup(db, shareGroup, user)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return JoinShareGroupResponseMapper(shareGroup), nil
+}
+
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {

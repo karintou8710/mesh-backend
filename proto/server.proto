@@ -40,7 +40,16 @@ message CreateShareGroupResponse {
     ShareGroup shareGroup = 1;
 }
 
+message JoinShareGroupRequest {
+    string linkKey = 1;
+}
+
+message JoinShareGroupResponse {
+    ShareGroup shareGroup = 1;
+}
+
 service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
+    rpc JoinShareGroup (JoinShareGroupRequest) returns (JoinShareGroupResponse);
 }
