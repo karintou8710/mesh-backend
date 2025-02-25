@@ -49,12 +49,12 @@ func CreateShareGroup(db *gorm.DB, destLon float64, destLat float64, meetingTime
 func JoinShareGroup(db *gorm.DB, shareGroup *database.ShareGroup, user *database.User) (
 	*database.ShareGroup, error,
 ) {
-	shareGroupdId := uint64(shareGroup.ID)
-	user.ShareGroupID = &shareGroupdId
+	user.ShareGroup = shareGroup
 
-	if res := db.Save(&user); res.Error != nil {
-		log.Printf("Error: %v\n", res.Error)
-		return nil, res.Error
+	err := db.Save(user).Error
+	if err != nil {
+		log.Printf("Error: %v\n", err)
+		return nil, err
 	}
 
 	updatedShareGroup := GetShareGroupByLinkKey(db, shareGroup.LinkKey)
