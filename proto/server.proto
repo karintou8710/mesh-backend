@@ -59,9 +59,19 @@ message GetCurrentShareGroupResponse {
     ShareGroup shareGroup = 1;
 }
 
+message UpdatePositionGroupRequest {
+    double lat = 1;
+    double lon = 2;
+}
+
+message UpdatePositionGroupResponse {
+    User user = 1;
+}
+
 service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
     rpc JoinShareGroup (JoinShareGroupRequest) returns (JoinShareGroupResponse);
     rpc GetCurrentShareGroup (GetCurrentShareGroupRequest) returns (GetCurrentShareGroupResponse);
+    rpc UpdatePosition (UpdatePositionGroupRequest) returns (UpdatePositionGroupResponse);
 }

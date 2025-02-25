@@ -82,3 +82,9 @@ func GetCurrentShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.Get
 		ShareGroup: ShareGroupMapper(shareGroup),
 	}
 }
+
+func UpdatePositionGroupResponseMapper(user *database.User) *pb.UpdatePositionGroupResponse {
+	return &pb.UpdatePositionGroupResponse{
+		User: UserMapper(user),
+	}
+}

@@ -100,6 +100,25 @@ func (s *server) GetCurrentShareGroup(ctx context.Context, req *pb.GetCurrentSha
 	return GetCurrentShareGroupResponseMapper(shareGroup), nil
 }
 
+func (s *server) UpdatePosition(ctx context.Context, req *pb.UpdatePositionGroupRequest) (
+	*pb.UpdatePositionGroupResponse, error,
+) {
+	db := database.GetDB()
+
+	user := Auth(ctx)
+	if user == nil {
+		return nil, fmt.Errorf("error: need to authenticate")
+	}
+
+	user, err := cruds.UpdatePosition(db, user, req.Lat, req.Lon)
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		return nil, fmt.Errorf("error: failed to update position")
+	}
+
+	return UpdatePositionGroupResponseMapper(user), nil
+}
+
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {

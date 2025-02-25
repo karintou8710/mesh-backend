@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"main/database"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -34,4 +35,20 @@ func CreateUser(db *gorm.DB, name string) (
 	}
 
 	return &user, nil
+}
+
+func UpdatePosition(db *gorm.DB, user *database.User, lat float64, lon float64) (
+	*database.User, error,
+) {
+	user.Lat = &lat
+	user.Lon = &lon
+	now := time.Now()
+	user.PositionAt = &now
+
+	if res := db.Save(&user); res.Error != nil {
+		log.Printf("Error: %v\n", res.Error)
+		return nil, res.Error
+	}
+
+	return user, nil
 }

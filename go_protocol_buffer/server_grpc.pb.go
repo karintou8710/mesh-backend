@@ -26,6 +26,7 @@ type ServiceClient interface {
 	CreateShareGroup(ctx context.Context, in *CreateShareGroupRequest, opts ...grpc.CallOption) (*CreateShareGroupResponse, error)
 	JoinShareGroup(ctx context.Context, in *JoinShareGroupRequest, opts ...grpc.CallOption) (*JoinShareGroupResponse, error)
 	GetCurrentShareGroup(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (*GetCurrentShareGroupResponse, error)
+	UpdatePosition(ctx context.Context, in *UpdatePositionGroupRequest, opts ...grpc.CallOption) (*UpdatePositionGroupResponse, error)
 }
 
 type serviceClient struct {
@@ -72,6 +73,15 @@ func (c *serviceClient) GetCurrentShareGroup(ctx context.Context, in *GetCurrent
 	return out, nil
 }
 
+func (c *serviceClient) UpdatePosition(ctx context.Context, in *UpdatePositionGroupRequest, opts ...grpc.CallOption) (*UpdatePositionGroupResponse, error) {
+	out := new(UpdatePositionGroupResponse)
+	err := c.cc.Invoke(ctx, "/Server.Service/UpdatePosition", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServiceServer is the server API for Service service.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type ServiceServer interface {
 	CreateShareGroup(context.Context, *CreateShareGroupRequest) (*CreateShareGroupResponse, error)
 	JoinShareGroup(context.Context, *JoinShareGroupRequest) (*JoinShareGroupResponse, error)
 	GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error)
+	UpdatePosition(context.Context, *UpdatePositionGroupRequest) (*UpdatePositionGroupResponse, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedServiceServer) JoinShareGroup(context.Context, *JoinShareGrou
 }
 func (UnimplementedServiceServer) GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentShareGroup not implemented")
+}
+func (UnimplementedServiceServer) UpdatePosition(context.Context, *UpdatePositionGroupRequest) (*UpdatePositionGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePosition not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -184,6 +198,24 @@ func _Service_GetCurrentShareGroup_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePositionGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).UpdatePosition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server.Service/UpdatePosition",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).UpdatePosition(ctx, req.(*UpdatePositionGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Service_ServiceDesc is the grpc.ServiceDesc for Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCurrentShareGroup",
 			Handler:    _Service_GetCurrentShareGroup_Handler,
+		},
+		{
+			MethodName: "UpdatePosition",
+			Handler:    _Service_UpdatePosition_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
