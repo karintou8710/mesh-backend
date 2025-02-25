@@ -152,7 +152,7 @@ func (s *server) LeaveShareGroup(ctx context.Context, req *pb.LeaveShareGroupReq
 func main() {
 	LoadEnv()
 
-	listener, err := net.Listen("tcp", "localhost:8080")
+	listener, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}

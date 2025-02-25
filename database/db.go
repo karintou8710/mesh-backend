@@ -27,7 +27,7 @@ type ShareGroup struct {
 }
 
 func GetDB() *gorm.DB {
-	dsn := "host=localhost user=user password=password dbname=db port=15000 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := "host=db user=user password=password dbname=db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect db")
