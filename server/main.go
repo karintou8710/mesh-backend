@@ -119,6 +119,17 @@ func (s *server) UpdatePosition(ctx context.Context, req *pb.UpdatePositionGroup
 	return UpdatePositionGroupResponseMapper(user), nil
 }
 
+func (s *server) GetCurrentUser(ctx context.Context, req *pb.GetCurrentUserRequest) (
+	*pb.GetCurrentUserResponse, error,
+) {
+	user := Auth(ctx)
+	if user == nil {
+		return nil, fmt.Errorf("error: need to authenticate")
+	}
+
+	return GetCurrentUserResponseMapper(user), nil
+}
+
 func main() {
 	listener, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {

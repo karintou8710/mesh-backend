@@ -68,10 +68,17 @@ message UpdatePositionGroupResponse {
     User user = 1;
 }
 
+message GetCurrentUserRequest {}
+
+message GetCurrentUserResponse {
+    User user = 1;
+}
+
 service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
     rpc JoinShareGroup (JoinShareGroupRequest) returns (JoinShareGroupResponse);
     rpc GetCurrentShareGroup (GetCurrentShareGroupRequest) returns (GetCurrentShareGroupResponse);
     rpc UpdatePosition (UpdatePositionGroupRequest) returns (UpdatePositionGroupResponse);
+    rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserResponse);
 }

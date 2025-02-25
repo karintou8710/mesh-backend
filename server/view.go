@@ -88,3 +88,9 @@ func UpdatePositionGroupResponseMapper(user *database.User) *pb.UpdatePositionGr
 		User: UserMapper(user),
 	}
 }
+
+func GetCurrentUserResponseMapper(user *database.User) *pb.GetCurrentUserResponse {
+	return &pb.GetCurrentUserResponse{
+		User: UserMapper(user),
+	}
+}
