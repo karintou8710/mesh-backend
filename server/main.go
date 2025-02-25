@@ -30,28 +30,32 @@ func (s *server) AnonymousSignUp(ctx context.Context, req *pb.AnonymousSignUpReq
 		return nil, err
 	}
 
-	response := pb.AnonymousSignUpResponse{
-		User: &pb.User{Id: uint64(user.ID), Name: user.Name}, AccessToken: accessToken,
-	}
-
-	return &response, nil
+	return AnonymousSignUpResponseMapper(user, accessToken), nil
 }
 
 func (s *server) CreateShareGroup(ctx context.Context, req *pb.CreateShareGroupRequest) (
 	*pb.CreateShareGroupResponse, error,
 ) {
-	claims := Auth(ctx)
-	userId := claims["ist"]
 	db := database.GetDB()
+
+	user := Auth(ctx)
+	if user == nil {
+		return nil, fmt.Errorf("error: need to authenticate")
+	}
 
 	shareGroup, err := cruds.CreateShareGroup(db, req.DestLng, req.DestLat, req.MeetingTime)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 
-	fmt.Println(userId)
+	shareGroup, err = cruds.JoinShareGroup(db, shareGroup, user)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
-	return shareGroup, nil
+	return CreateShareGroupResponseMapper(shareGroup), nil
 }
 
 func main() {

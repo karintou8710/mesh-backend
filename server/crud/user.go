@@ -29,7 +29,7 @@ func CreateUser(db *gorm.DB, name string) (
 	user := database.User{Name: name}
 
 	if res := db.Create(&user); res.Error != nil {
-		log.Fatalf("Error: %v", res.Error)
+		log.Printf("Error: %v\n", res.Error)
 		return nil, res.Error
 	}
 

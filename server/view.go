@@ -1,0 +1,51 @@
+package main
+
+import (
+	"main/database"
+	pb "main/go_protocol_buffer"
+)
+
+func UserMapper(user *database.User) *pb.User {
+	if user == nil {
+		return nil
+	}
+
+	return &pb.User{Id: uint64(user.ID), Name: user.Name, ShareGroup: ShareGroupMapper(&user.ShareGroup)}
+}
+
+func UserListMapper(users []database.User) []*pb.User {
+	viewUsers := []*pb.User{}
+
+	for _, user := range users {
+		viewUsers = append(viewUsers, UserMapper(&user))
+	}
+
+	return viewUsers
+}
+
+func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
+	if shareGroup == nil {
+		return nil
+	}
+
+	return &pb.ShareGroup{
+		Id:          uint64(shareGroup.ID),
+		DestLng:     shareGroup.DestLng,
+		DestLat:     shareGroup.DestLat,
+		LinkKey:     shareGroup.LinkKey,
+		MeetingTime: shareGroup.MeetingTime,
+		Users:       UserListMapper(shareGroup.Users),
+	}
+}
+
+func AnonymousSignUpResponseMapper(user *database.User, accessToken string) *pb.AnonymousSignUpResponse {
+	return &pb.AnonymousSignUpResponse{
+		User: UserMapper(user), AccessToken: accessToken,
+	}
+}
+
+func CreateShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.CreateShareGroupResponse {
+	return &pb.CreateShareGroupResponse{
+		ShareGroup: ShareGroupMapper(shareGroup),
+	}
+}

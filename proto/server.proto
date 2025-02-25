@@ -6,7 +6,7 @@ option go_package = "./go_protocol_buffer";
 
 message ShareGroup {
     uint64 id = 1;
-    string linkId = 2;
+    string linkKey = 2;
     double destLng = 3;
     double destLat = 4;
     repeated User users = 5;

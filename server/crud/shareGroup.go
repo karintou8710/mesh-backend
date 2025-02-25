@@ -16,11 +16,11 @@ func GenUUIDV4() string {
 
 func GetShareGroupByLinkKey(db *gorm.DB, linkKey string) *database.ShareGroup {
 	var shareGroup database.ShareGroup
-	res := db.Where("linkkey = ?", linkKey).First(&shareGroup)
+	err := db.Where("link_key = ?", linkKey).Preload("Users").First(&shareGroup).Error
 
-	if res.Error != nil {
-		if !errors.Is(res.Error, gorm.ErrRecordNotFound) {
-			log.Println(res.Error)
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("error: %v\n", err)
 		}
 
 		return nil
@@ -39,22 +39,24 @@ func CreateShareGroup(db *gorm.DB, destLng float64, destLat float64, meetingTime
 		MeetingTime: meetingTime,
 	}
 	if res := db.Create(&shareGroup); res.Error != nil {
-		log.Fatalf("Error: %v", res.Error)
+		log.Printf("Error: %v\n", res.Error)
 		return nil, res.Error
 	}
 
 	return &shareGroup, nil
 }
 
-func JoinShareGroupByLinkKey(db *gorm.DB, user database.User, shareGroup database.ShareGroup) (
+func JoinShareGroup(db *gorm.DB, shareGroup *database.ShareGroup, user *database.User) (
 	*database.ShareGroup, error,
 ) {
 	user.ShareGroupID = int(shareGroup.ID)
 
 	if res := db.Save(&user); res.Error != nil {
-		log.Fatalf("Error: %v", res.Error)
+		log.Printf("Error: %v\n", res.Error)
 		return nil, res.Error
 	}
 
-	return &shareGroup, nil
+	updatedShareGroup := GetShareGroupByLinkKey(db, shareGroup.LinkKey)
+
+	return updatedShareGroup, nil
 }

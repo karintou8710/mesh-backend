@@ -18,6 +18,7 @@ type ShareGroup struct {
 	DestLng     float64
 	DestLat     float64
 	MeetingTime string
+	Users       []User
 }
 
 func GetDB() *gorm.DB {

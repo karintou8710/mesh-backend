@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"main/database"
+	cruds "main/server/crud"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -31,21 +33,25 @@ func BuildAccessToken(sub uint) (string, error) {
 
 	accessToken, err := token.SignedString(SECRET)
 	if err != nil {
-		log.Fatalf("Error: %v", err)
+		log.Printf("error: %v\n", err)
 		return "", err
 	}
 
 	return accessToken, nil
 }
 
-func Auth(ctx context.Context) jwt.MapClaims {
+func Auth(ctx context.Context) *database.User {
+	db := database.GetDB()
+
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
+		log.Println("error: FromIncomingContext")
 		return nil
 	}
 
 	tokenString := GetTokenFromMD(md)
 	if tokenString == "" {
+		log.Println("error: GetTokenFromMD")
 		return nil
 	}
 
@@ -58,12 +64,19 @@ func Auth(ctx context.Context) jwt.MapClaims {
 	})
 
 	if err != nil {
-		log.Println(err)
+		log.Printf("error: %v\n", err)
 		return nil
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		return claims
+		userId, ok := claims["sub"].(float64)
+		if !ok {
+			log.Println("error: failed to get userId")
+			return nil
+		}
+
+		user := cruds.GetUserById(db, int(userId))
+		return user
 	} else {
 		return nil
 	}
