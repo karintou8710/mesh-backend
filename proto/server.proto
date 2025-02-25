@@ -11,7 +11,8 @@ message ShareGroup {
     double destLat = 4;
     repeated User users = 5;
     string meetingTime = 6;
-  }
+    string inviteUrl = 7;
+}
 
 message User {
     uint64 id = 1;

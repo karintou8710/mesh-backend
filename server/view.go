@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"main/database"
 	pb "main/go_protocol_buffer"
 )
@@ -39,6 +40,7 @@ func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
 		DestLat:     shareGroup.DestLat,
 		LinkKey:     shareGroup.LinkKey,
 		MeetingTime: shareGroup.MeetingTime,
+		InviteUrl:   fmt.Sprintf("mesh://invite/%s", shareGroup.LinkKey),
 		Users:       UserListMapper(shareGroup.Users),
 	}
 }
