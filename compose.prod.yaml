@@ -1,0 +1,35 @@
+services:
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAINS: ${DOMAINS}
+      STAGE: ${STAGE}
+    volumes:
+      - https-portal-data:/var/lib/https-portal
+  app:
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:17.0
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - db-store:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-store:
+  https-portal-data:
