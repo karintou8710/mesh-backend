@@ -1,6 +1,8 @@
 package database
 
 import (
+	"fmt"
+	"os"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -27,7 +29,11 @@ type ShareGroup struct {
 }
 
 func GetDB() *gorm.DB {
-	dsn := "host=db user=user password=password dbname=db port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Shanghai",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
+	)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect db")
