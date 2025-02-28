@@ -162,6 +162,25 @@ func (s *server) LeaveShareGroup(ctx context.Context, req *pb.LeaveShareGroupReq
 	return LeaveShareGroupResponseMapper(user), nil
 }
 
+func (s *server) ArriveDest(ctx context.Context, req *pb.ArriveDestRequest) (
+	*pb.ArriveDestResponse, error,
+) {
+	db := database.GetDB()
+
+	user := Auth(ctx)
+	if user == nil {
+		return nil, fmt.Errorf("error: need to authenticate")
+	}
+
+	user, err := cruds.UpdateIsArrived(db, user)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return ArriveDestResponseMapper(user), nil
+}
+
 func main() {
 	listener, err := net.Listen("tcp", ":8080")
 	if err != nil {

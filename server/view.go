@@ -11,6 +11,8 @@ func UserMapper(user *database.User) *pb.User {
 		return nil
 	}
 
+	fmt.Println(user.IsArrived)
+
 	viewUser := &pb.User{
 		Id:         uint64(user.ID),
 		Name:       user.Name,
@@ -28,7 +30,7 @@ func UserMapper(user *database.User) *pb.User {
 		viewUser.PositionAt = &positionAtStr
 	}
 	if user.ShareGroupID != nil {
-		viewUser.ShareGroupId = *user.ShareGroupID
+		viewUser.ShareGroupId = user.ShareGroupID
 	}
 	viewUser.ShareGroup = ShareGroupMapper(user.ShareGroup)
 
@@ -107,6 +109,12 @@ func GetCurrentUserResponseMapper(user *database.User) *pb.GetCurrentUserRespons
 
 func LeaveShareGroupResponseMapper(user *database.User) *pb.LeaveShareGroupResponse {
 	return &pb.LeaveShareGroupResponse{
+		User: UserMapper(user),
+	}
+}
+
+func ArriveDestResponseMapper(user *database.User) *pb.ArriveDestResponse {
+	return &pb.ArriveDestResponse{
 		User: UserMapper(user),
 	}
 }

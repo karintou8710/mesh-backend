@@ -52,3 +52,14 @@ func UpdatePosition(db *gorm.DB, user *database.User, lat float64, lon float64) 
 
 	return user, nil
 }
+
+func UpdateIsArrived(db *gorm.DB, user *database.User) (*database.User, error) {
+	user.IsArrived = true
+
+	if res := db.Save(&user); res.Error != nil {
+		log.Printf("Error: %v\n", res.Error)
+		return nil, res.Error
+	}
+
+	return user, nil
+}

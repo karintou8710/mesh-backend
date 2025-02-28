@@ -19,12 +19,12 @@ message ShareGroup {
 message User {
     uint64 id = 1;
     string name = 2;
-    ShareGroup shareGroup = 3;
-    uint64 shareGroupId = 4;
-    optional double lat = 5;
-    optional double lon = 6;
-    optional string positionAt = 7;
-    bool isArrived = 8;
+    bool isArrived = 3;
+    optional ShareGroup shareGroup = 4;
+    optional uint64 shareGroupId = 5;
+    optional double lat = 6;
+    optional double lon = 7;
+    optional string positionAt = 8;
 }
 
 message AnonymousSignUpRequest {
@@ -90,6 +90,12 @@ message LeaveShareGroupResponse {
     User user = 1;
 }
 
+message ArriveDestRequest {}
+
+message ArriveDestResponse {
+    User user = 1;
+}
+
 service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
@@ -99,4 +105,5 @@ service Service {
     rpc UpdatePosition (UpdatePositionRequest) returns (UpdatePositionResponse);
     rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserResponse);
     rpc LeaveShareGroup (LeaveShareGroupRequest) returns (LeaveShareGroupResponse);
+    rpc ArriveDest (ArriveDestRequest) returns (ArriveDestResponse);
 }
