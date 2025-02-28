@@ -78,6 +78,12 @@ func JoinShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.JoinShare
 	}
 }
 
+func GetShareGroupLinkKeyResponseMapper(shareGroup *database.ShareGroup) *pb.GetShareGroupByLinkKeyResponse {
+	return &pb.GetShareGroupByLinkKeyResponse{
+		ShareGroup: ShareGroupMapper(shareGroup),
+	}
+}
+
 func GetCurrentShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.GetCurrentShareGroupResponse {
 	return &pb.GetCurrentShareGroupResponse{
 		ShareGroup: ShareGroupMapper(shareGroup),

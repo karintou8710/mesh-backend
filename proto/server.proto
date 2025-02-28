@@ -53,9 +53,15 @@ message JoinShareGroupResponse {
     ShareGroup shareGroup = 1;
 }
 
-message GetCurrentShareGroupRequest {
-    string groupId = 1;
+message GetShareGroupByLinkKeyRequest {
+    string linkKey = 1;
 }
+
+message GetShareGroupByLinkKeyResponse {
+    ShareGroup shareGroup = 1;
+}
+
+message GetCurrentShareGroupRequest {}
 
 message GetCurrentShareGroupResponse {
     ShareGroup shareGroup = 1;
@@ -87,6 +93,7 @@ service Service {
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
     rpc JoinShareGroup (JoinShareGroupRequest) returns (JoinShareGroupResponse);
     rpc GetCurrentShareGroup (GetCurrentShareGroupRequest) returns (GetCurrentShareGroupResponse);
+    rpc GetShareGroupByLinkKey (GetShareGroupByLinkKeyRequest) returns (GetShareGroupByLinkKeyResponse);
     rpc UpdatePosition (UpdatePositionRequest) returns (UpdatePositionResponse);
     rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserResponse);
     rpc LeaveShareGroup (LeaveShareGroupRequest) returns (LeaveShareGroupResponse);

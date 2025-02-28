@@ -82,6 +82,19 @@ func (s *server) JoinShareGroup(ctx context.Context, req *pb.JoinShareGroupReque
 	return JoinShareGroupResponseMapper(shareGroup), nil
 }
 
+func (s *server) GetShareGroupByLinkKey(ctx context.Context, req *pb.GetShareGroupByLinkKeyRequest) (
+	*pb.GetShareGroupByLinkKeyResponse, error,
+) {
+	db := database.GetDB()
+
+	shareGroup := cruds.GetShareGroupByLinkKey(db, req.LinkKey)
+	if shareGroup == nil {
+		return nil, fmt.Errorf("error: the linkKey is invalid")
+	}
+
+	return GetShareGroupLinkKeyResponseMapper(shareGroup), nil
+}
+
 func (s *server) GetCurrentShareGroup(ctx context.Context, req *pb.GetCurrentShareGroupRequest) (
 	*pb.GetCurrentShareGroupResponse, error,
 ) {

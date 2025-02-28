@@ -26,6 +26,7 @@ type ServiceClient interface {
 	CreateShareGroup(ctx context.Context, in *CreateShareGroupRequest, opts ...grpc.CallOption) (*CreateShareGroupResponse, error)
 	JoinShareGroup(ctx context.Context, in *JoinShareGroupRequest, opts ...grpc.CallOption) (*JoinShareGroupResponse, error)
 	GetCurrentShareGroup(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (*GetCurrentShareGroupResponse, error)
+	GetShareGroupByLinkKey(ctx context.Context, in *GetShareGroupByLinkKeyRequest, opts ...grpc.CallOption) (*GetShareGroupByLinkKeyResponse, error)
 	UpdatePosition(ctx context.Context, in *UpdatePositionRequest, opts ...grpc.CallOption) (*UpdatePositionResponse, error)
 	GetCurrentUser(ctx context.Context, in *GetCurrentUserRequest, opts ...grpc.CallOption) (*GetCurrentUserResponse, error)
 	LeaveShareGroup(ctx context.Context, in *LeaveShareGroupRequest, opts ...grpc.CallOption) (*LeaveShareGroupResponse, error)
@@ -75,6 +76,15 @@ func (c *serviceClient) GetCurrentShareGroup(ctx context.Context, in *GetCurrent
 	return out, nil
 }
 
+func (c *serviceClient) GetShareGroupByLinkKey(ctx context.Context, in *GetShareGroupByLinkKeyRequest, opts ...grpc.CallOption) (*GetShareGroupByLinkKeyResponse, error) {
+	out := new(GetShareGroupByLinkKeyResponse)
+	err := c.cc.Invoke(ctx, "/Server.Service/GetShareGroupByLinkKey", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serviceClient) UpdatePosition(ctx context.Context, in *UpdatePositionRequest, opts ...grpc.CallOption) (*UpdatePositionResponse, error) {
 	out := new(UpdatePositionResponse)
 	err := c.cc.Invoke(ctx, "/Server.Service/UpdatePosition", in, out, opts...)
@@ -110,6 +120,7 @@ type ServiceServer interface {
 	CreateShareGroup(context.Context, *CreateShareGroupRequest) (*CreateShareGroupResponse, error)
 	JoinShareGroup(context.Context, *JoinShareGroupRequest) (*JoinShareGroupResponse, error)
 	GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error)
+	GetShareGroupByLinkKey(context.Context, *GetShareGroupByLinkKeyRequest) (*GetShareGroupByLinkKeyResponse, error)
 	UpdatePosition(context.Context, *UpdatePositionRequest) (*UpdatePositionResponse, error)
 	GetCurrentUser(context.Context, *GetCurrentUserRequest) (*GetCurrentUserResponse, error)
 	LeaveShareGroup(context.Context, *LeaveShareGroupRequest) (*LeaveShareGroupResponse, error)
@@ -131,6 +142,9 @@ func (UnimplementedServiceServer) JoinShareGroup(context.Context, *JoinShareGrou
 }
 func (UnimplementedServiceServer) GetCurrentShareGroup(context.Context, *GetCurrentShareGroupRequest) (*GetCurrentShareGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCurrentShareGroup not implemented")
+}
+func (UnimplementedServiceServer) GetShareGroupByLinkKey(context.Context, *GetShareGroupByLinkKeyRequest) (*GetShareGroupByLinkKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetShareGroupByLinkKey not implemented")
 }
 func (UnimplementedServiceServer) UpdatePosition(context.Context, *UpdatePositionRequest) (*UpdatePositionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePosition not implemented")
@@ -226,6 +240,24 @@ func _Service_GetCurrentShareGroup_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_GetShareGroupByLinkKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetShareGroupByLinkKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).GetShareGroupByLinkKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server.Service/GetShareGroupByLinkKey",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).GetShareGroupByLinkKey(ctx, req.(*GetShareGroupByLinkKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Service_UpdatePosition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdatePositionRequest)
 	if err := dec(in); err != nil {
@@ -302,6 +334,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCurrentShareGroup",
 			Handler:    _Service_GetCurrentShareGroup_Handler,
+		},
+		{
+			MethodName: "GetShareGroupByLinkKey",
+			Handler:    _Service_GetShareGroupByLinkKey_Handler,
 		},
 		{
 			MethodName: "UpdatePosition",
