@@ -29,7 +29,7 @@ func GetShareGroupByLinkKey(db *gorm.DB, linkKey string) *database.ShareGroup {
 	return &shareGroup
 }
 
-func CreateShareGroup(db *gorm.DB, destLon float64, destLat float64, meetingTime string) (
+func CreateShareGroup(db *gorm.DB, destLon float64, destLat float64, meetingTime string, address string) (
 	*database.ShareGroup, error,
 ) {
 	shareGroup := database.ShareGroup{
@@ -37,6 +37,7 @@ func CreateShareGroup(db *gorm.DB, destLon float64, destLat float64, meetingTime
 		DestLon:     destLon,
 		DestLat:     destLat,
 		MeetingTime: meetingTime,
+		Address:     address,
 	}
 	if res := db.Create(&shareGroup); res.Error != nil {
 		log.Printf("Error: %v\n", res.Error)

@@ -12,6 +12,7 @@ message ShareGroup {
     repeated User users = 5;
     string meetingTime = 6;
     string inviteUrl = 7;
+    string address = 8;
 }
 
 message User {
@@ -34,9 +35,10 @@ message AnonymousSignUpResponse {
 }
 
 message CreateShareGroupRequest {
-    double destLon = 3;
-    double destLat = 4;
-    string meetingTime = 5;
+    double destLon = 1;
+    double destLat = 2;
+    string meetingTime = 3;
+    string address = 4;
 }
 
 message CreateShareGroupResponse {

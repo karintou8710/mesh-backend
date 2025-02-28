@@ -25,6 +25,7 @@ type ShareGroup struct {
 	DestLon     float64
 	DestLat     float64
 	MeetingTime string
+	Address     string
 	Users       []*User
 }
 
