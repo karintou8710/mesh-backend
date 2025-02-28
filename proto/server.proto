@@ -24,6 +24,7 @@ message User {
     optional double lat = 5;
     optional double lon = 6;
     optional string positionAt = 7;
+    bool isArrived = 8;
 }
 
 message AnonymousSignUpRequest {

@@ -17,6 +17,7 @@ type User struct {
 	Lat          *float64
 	Lon          *float64
 	PositionAt   *time.Time
+	IsArrived    bool `gorm:"default:false"`
 }
 
 type ShareGroup struct {

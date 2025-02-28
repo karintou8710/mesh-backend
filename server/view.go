@@ -15,6 +15,7 @@ func UserMapper(user *database.User) *pb.User {
 		Id:         uint64(user.ID),
 		Name:       user.Name,
 		ShareGroup: ShareGroupMapper(user.ShareGroup),
+		IsArrived:  user.IsArrived,
 	}
 	if user.Lat != nil {
 		viewUser.Lat = user.Lat
