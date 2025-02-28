@@ -31,11 +31,11 @@ type ShareGroup struct {
 	Users       []*User
 }
 
-var db *gorm.DB
+var globalDB *gorm.DB
 
 func GetDB() *gorm.DB {
-	if db != nil {
-		return db
+	if globalDB != nil {
+		return globalDB
 	}
 
 	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Shanghai",
@@ -47,5 +47,8 @@ func GetDB() *gorm.DB {
 	if err != nil {
 		panic("failed to connect db")
 	}
+
+	globalDB = db
+
 	return db
 }
