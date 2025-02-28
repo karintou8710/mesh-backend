@@ -21,9 +21,9 @@ message User {
     string name = 2;
     ShareGroup shareGroup = 3;
     uint64 shareGroupId = 4;
-    double lat = 5;
-    double lon = 6;
-    string positionAt = 7;
+    optional double lat = 5;
+    optional double lon = 6;
+    optional string positionAt = 7;
 }
 
 message AnonymousSignUpRequest {

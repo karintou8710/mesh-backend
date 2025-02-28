@@ -17,13 +17,14 @@ func UserMapper(user *database.User) *pb.User {
 		ShareGroup: ShareGroupMapper(user.ShareGroup),
 	}
 	if user.Lat != nil {
-		viewUser.Lat = *user.Lat
+		viewUser.Lat = user.Lat
 	}
 	if user.Lon != nil {
-		viewUser.Lon = *user.Lon
+		viewUser.Lon = user.Lon
 	}
 	if user.PositionAt != nil {
-		viewUser.PositionAt = (*user.PositionAt).String()
+		positionAtStr := (*user.PositionAt).String()
+		viewUser.PositionAt = &positionAtStr
 	}
 	if user.ShareGroupID != nil {
 		viewUser.ShareGroupId = *user.ShareGroupID
