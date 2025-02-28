@@ -13,6 +13,7 @@ message ShareGroup {
     string meetingTime = 6;
     string inviteUrl = 7;
     string address = 8;
+    User adminUser = 9;
 }
 
 message User {

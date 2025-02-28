@@ -57,6 +57,7 @@ func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
 		InviteUrl:   fmt.Sprintf("mesh://invite/%s", shareGroup.LinkKey),
 		Address:     shareGroup.Address,
 		Users:       UserListMapper(shareGroup.Users),
+		AdminUser:   UserMapper(&shareGroup.AdminUser),
 	}
 }
 

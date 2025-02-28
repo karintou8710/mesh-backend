@@ -16,7 +16,7 @@ func GenUUIDV4() string {
 
 func GetShareGroupByLinkKey(db *gorm.DB, linkKey string) *database.ShareGroup {
 	var shareGroup database.ShareGroup
-	err := db.Where("link_key = ?", linkKey).Preload("Users").First(&shareGroup).Error
+	err := db.Where("link_key = ?", linkKey).Preload("Users").Preload("AdminUser").First(&shareGroup).Error
 
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -29,7 +29,10 @@ func GetShareGroupByLinkKey(db *gorm.DB, linkKey string) *database.ShareGroup {
 	return &shareGroup
 }
 
-func CreateShareGroup(db *gorm.DB, destLon float64, destLat float64, meetingTime string, address string) (
+func CreateShareGroup(
+	db *gorm.DB, destLon float64, destLat float64,
+	meetingTime string, address string, adminUserID uint,
+) (
 	*database.ShareGroup, error,
 ) {
 	shareGroup := database.ShareGroup{
@@ -38,6 +41,7 @@ func CreateShareGroup(db *gorm.DB, destLon float64, destLat float64, meetingTime
 		DestLat:     destLat,
 		MeetingTime: meetingTime,
 		Address:     address,
+		AdminUserID: uint64(adminUserID),
 	}
 	if res := db.Create(&shareGroup); res.Error != nil {
 		log.Printf("Error: %v\n", res.Error)
