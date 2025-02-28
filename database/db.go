@@ -31,7 +31,13 @@ type ShareGroup struct {
 	Users       []*User
 }
 
+var db *gorm.DB
+
 func GetDB() *gorm.DB {
+	if db != nil {
+		return db
+	}
+
 	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
