@@ -4,6 +4,10 @@ services:
       context: .
     ports:
       - 8080:8080
+    develop:
+      watch:
+        - action: rebuild
+          path: .
     environment:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
