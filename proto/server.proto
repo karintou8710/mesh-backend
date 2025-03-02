@@ -25,6 +25,7 @@ message User {
     optional double lat = 6;
     optional double lon = 7;
     optional string positionAt = 8;
+    optional string shortMessage = 9;
 }
 
 message AnonymousSignUpRequest {
@@ -96,6 +97,14 @@ message ArriveDestResponse {
     User user = 1;
 }
 
+message UpdateShortMessageRequest {
+    string shortMessage = 1;
+}
+
+message UpdateShortMessageResponse {
+    User user = 1;
+}
+
 service Service {
     rpc AnonymousSignUp (AnonymousSignUpRequest) returns (AnonymousSignUpResponse);
     rpc CreateShareGroup (CreateShareGroupRequest) returns (CreateShareGroupResponse);
@@ -106,4 +115,5 @@ service Service {
     rpc GetCurrentUser (GetCurrentUserRequest) returns (GetCurrentUserResponse);
     rpc LeaveShareGroup (LeaveShareGroupRequest) returns (LeaveShareGroupResponse);
     rpc ArriveDest (ArriveDestRequest) returns (ArriveDestResponse);
+    rpc UpdateShortMessage (UpdateShortMessageRequest) returns (UpdateShortMessageResponse);
 }

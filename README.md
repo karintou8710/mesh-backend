@@ -16,3 +16,9 @@ $ docker compose exec app go run /app/scripts/migrate/main.go
 ```
 $ docker compose up --watch
 ```
+
+## 型生成
+
+```bash
+$ protoc -I. --go_out=. --go-grpc_out=. proto/*.proto
+```
