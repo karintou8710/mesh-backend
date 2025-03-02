@@ -1,0 +1,31 @@
+package handler
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"main/database"
+	pb "main/go_protocol_buffer"
+	"main/server/auth"
+	"main/server/crud"
+	"main/server/view"
+)
+
+func (s *Server) LeaveShareGroup(ctx context.Context, req *pb.LeaveShareGroupRequest) (
+	*pb.LeaveShareGroupResponse, error,
+) {
+	db := database.GetDB()
+
+	user := auth.Auth(ctx)
+	if user == nil {
+		return nil, fmt.Errorf("error: need to authenticate")
+	}
+
+	user, err := crud.LeaveShareGroup(db, user)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return view.LeaveShareGroupResponseMapper(user), nil
+}

@@ -1,4 +1,4 @@
-package main
+package view
 
 import (
 	"fmt"
@@ -10,8 +10,6 @@ func UserMapper(user *database.User) *pb.User {
 	if user == nil {
 		return nil
 	}
-
-	fmt.Println(user.IsArrived)
 
 	viewUser := &pb.User{
 		Id:         uint64(user.ID),
