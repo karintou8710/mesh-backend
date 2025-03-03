@@ -63,3 +63,16 @@ func UpdateIsArrived(db *gorm.DB, user *database.User) (*database.User, error) {
 
 	return user, nil
 }
+
+func UpdateShortMessage(db *gorm.DB, user *database.User, shortMessage *string) (
+	*database.User, error,
+) {
+	user.ShortMessage = shortMessage
+
+	if res := db.Save(&user); res.Error != nil {
+		log.Printf("Error: %v\n", res.Error)
+		return nil, res.Error
+	}
+
+	return user, nil
+}

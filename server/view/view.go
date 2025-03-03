@@ -17,6 +17,9 @@ func UserMapper(user *database.User) *pb.User {
 		ShareGroup: ShareGroupMapper(user.ShareGroup),
 		IsArrived:  user.IsArrived,
 	}
+	if user.ShortMessage != nil {
+		viewUser.ShortMessage = user.ShortMessage
+	}
 	if user.Lat != nil {
 		viewUser.Lat = user.Lat
 	}
@@ -113,6 +116,12 @@ func LeaveShareGroupResponseMapper(user *database.User) *pb.LeaveShareGroupRespo
 
 func ArriveDestResponseMapper(user *database.User) *pb.ArriveDestResponse {
 	return &pb.ArriveDestResponse{
+		User: UserMapper(user),
+	}
+}
+
+func UpdateShortMessageMapper(user *database.User) *pb.UpdateShortMessageResponse {
+	return &pb.UpdateShortMessageResponse{
 		User: UserMapper(user),
 	}
 }
