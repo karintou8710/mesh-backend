@@ -20,6 +20,10 @@ func (s *Server) GetCurrentShareGroup(ctx context.Context, req *pb.GetCurrentSha
 		return nil, fmt.Errorf("error: need to authenticate")
 	}
 
+	if user.ShareGroup == nil {
+		return view.GetCurrentShareGroupResponseMapper(nil), nil
+	}
+
 	shareGroup := crud.GetShareGroupByLinkKey(db, user.ShareGroup.LinkKey)
 	if shareGroup == nil {
 		return nil, fmt.Errorf("error: the linkKey is invalid")
