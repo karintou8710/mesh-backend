@@ -16,6 +16,7 @@ func UserMapper(user *database.User) *pb.User {
 		Name:       user.Name,
 		ShareGroup: ShareGroupMapper(user.ShareGroup),
 		IsArrived:  user.IsArrived,
+		IconID:     user.IconID,
 	}
 	if user.ShortMessage != nil {
 		viewUser.ShortMessage = user.ShortMessage

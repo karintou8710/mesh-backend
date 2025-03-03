@@ -15,7 +15,7 @@ func (s *Server) AnonymousSignUp(ctx context.Context, req *pb.AnonymousSignUpReq
 ) {
 	db := database.GetDB()
 
-	user, err := crud.CreateUser(db, req.Name)
+	user, err := crud.CreateUser(db, req.Name, req.IconID)
 	if err != nil {
 		return nil, err
 	}

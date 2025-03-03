@@ -24,10 +24,10 @@ func GetUserById(db *gorm.DB, userId int) *database.User {
 	return &user
 }
 
-func CreateUser(db *gorm.DB, name string) (
+func CreateUser(db *gorm.DB, name string, iconID string) (
 	*database.User, error,
 ) {
-	user := database.User{Name: name}
+	user := database.User{Name: name, IconID: iconID}
 
 	if res := db.Create(&user); res.Error != nil {
 		log.Printf("Error: %v\n", res.Error)
