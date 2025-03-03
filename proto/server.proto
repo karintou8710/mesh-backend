@@ -26,10 +26,12 @@ message User {
     optional double lon = 7;
     optional string positionAt = 8;
     optional string shortMessage = 9;
+    string iconID = 10;
 }
 
 message AnonymousSignUpRequest {
     string name = 1;
+    string iconID = 2;
 }
 
 message AnonymousSignUpResponse {

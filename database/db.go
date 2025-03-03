@@ -12,6 +12,7 @@ import (
 type User struct {
 	gorm.Model
 	Name         string
+	IconID       string
 	ShortMessage *string
 	ShareGroupID *uint64
 	ShareGroup   *ShareGroup
