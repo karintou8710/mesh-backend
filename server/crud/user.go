@@ -76,3 +76,13 @@ func UpdateShortMessage(db *gorm.DB, user *database.User, shortMessage *string) 
 
 	return user, nil
 }
+
+func LeaveShareGroup(db *gorm.DB, user *database.User) error {
+	err := db.Delete(user).Error
+	if err != nil {
+		log.Printf("Error: %v\n", err)
+		return err
+	}
+
+	return nil
+}

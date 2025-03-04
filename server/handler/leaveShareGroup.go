@@ -21,11 +21,19 @@ func (s *Server) LeaveShareGroup(ctx context.Context, req *pb.LeaveShareGroupReq
 		return nil, fmt.Errorf("error: need to authenticate")
 	}
 
-	user, err := crud.LeaveShareGroup(db, user)
-	if err != nil {
-		log.Println(err)
-		return nil, err
+	if user.ID == uint(user.ShareGroup.AdminUserID) {
+		err := crud.DeleteShareGroupByLinkKey(db, user.ShareGroup.LinkKey)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
+	} else {
+		err := crud.LeaveShareGroup(db, user)
+		if err != nil {
+			log.Println(err)
+			return nil, err
+		}
 	}
 
-	return view.LeaveShareGroupResponseMapper(user), nil
+	return view.LeaveShareGroupResponseMapper(), nil
 }

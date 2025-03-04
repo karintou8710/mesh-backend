@@ -89,9 +89,7 @@ message GetCurrentUserResponse {
 
 message LeaveShareGroupRequest {}
 
-message LeaveShareGroupResponse {
-    User user = 1;
-}
+message LeaveShareGroupResponse {}
 
 message ArriveDestRequest {}
 

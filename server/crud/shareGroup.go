@@ -67,17 +67,18 @@ func JoinShareGroup(db *gorm.DB, shareGroup *database.ShareGroup, user *database
 	return updatedShareGroup, nil
 }
 
-func LeaveShareGroup(db *gorm.DB, user *database.User) (
-	*database.User, error,
-) {
-	user.ShareGroup = nil
-	user.ShareGroupID = nil
-
-	err := db.Save(user).Error
-	if err != nil {
-		log.Printf("Error: %v\n", err)
-		return nil, err
+func DeleteShareGroupByLinkKey(db *gorm.DB, linkKey string) error {
+	shareGroup := GetShareGroupByLinkKey(db, linkKey)
+	if shareGroup == nil {
+		log.Printf("Info: ShareGroup is not found\n")
+		return nil
 	}
 
-	return user, nil
+	err := db.Delete(shareGroup).Error
+	if err != nil {
+		log.Printf("Error: %v\n", err)
+		return err
+	}
+
+	return nil
 }
