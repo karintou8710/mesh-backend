@@ -21,7 +21,7 @@ func (s *Server) GetCurrentShareGroup(ctx context.Context, req *pb.GetCurrentSha
 	}
 
 	if user.ShareGroup == nil {
-		return view.GetCurrentShareGroupResponseMapper(nil), nil
+		return view.GetCurrentShareGroupResponseMapper(nil, user.ID), nil
 	}
 
 	shareGroup := crud.GetShareGroupByLinkKey(db, user.ShareGroup.LinkKey)
@@ -29,5 +29,5 @@ func (s *Server) GetCurrentShareGroup(ctx context.Context, req *pb.GetCurrentSha
 		return nil, fmt.Errorf("error: the linkKey is invalid")
 	}
 
-	return view.GetCurrentShareGroupResponseMapper(shareGroup), nil
+	return view.GetCurrentShareGroupResponseMapper(shareGroup, user.ID), nil
 }

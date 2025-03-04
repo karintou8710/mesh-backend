@@ -6,7 +6,31 @@ import (
 	"main/database"
 	pb "main/go_protocol_buffer"
 	"main/server/utils"
+	"slices"
 )
+
+func UserWithoutPositionMapper(user *database.User) *pb.User {
+	if user == nil {
+		return nil
+	}
+
+	viewUser := &pb.User{
+		Id:         uint64(user.ID),
+		Name:       user.Name,
+		ShareGroup: ShareGroupMapper(user.ShareGroup, []uint{}),
+		IsArrived:  user.IsArrived,
+		IconID:     user.IconID,
+	}
+	if user.ShortMessage != nil {
+		viewUser.ShortMessage = user.ShortMessage
+	}
+	if user.ShareGroupID != nil {
+		viewUser.ShareGroupId = user.ShareGroupID
+	}
+	viewUser.ShareGroup = ShareGroupMapper(user.ShareGroup, []uint{})
+
+	return viewUser
+}
 
 func UserMapper(user *database.User) *pb.User {
 	if user == nil {
@@ -16,7 +40,7 @@ func UserMapper(user *database.User) *pb.User {
 	viewUser := &pb.User{
 		Id:         uint64(user.ID),
 		Name:       user.Name,
-		ShareGroup: ShareGroupMapper(user.ShareGroup),
+		ShareGroup: ShareGroupMapper(user.ShareGroup, []uint{}),
 		IsArrived:  user.IsArrived,
 		IconID:     user.IconID,
 	}
@@ -36,7 +60,7 @@ func UserMapper(user *database.User) *pb.User {
 	if user.ShareGroupID != nil {
 		viewUser.ShareGroupId = user.ShareGroupID
 	}
-	viewUser.ShareGroup = ShareGroupMapper(user.ShareGroup)
+	viewUser.ShareGroup = ShareGroupMapper(user.ShareGroup, []uint{})
 
 	return viewUser
 }
@@ -51,7 +75,21 @@ func UserListMapper(users []*database.User) []*pb.User {
 	return viewUsers
 }
 
-func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
+func UserWithoutPositionListMapper(users []*database.User, includeIds []uint) []*pb.User {
+	viewUsers := []*pb.User{}
+
+	for _, user := range users {
+		if slices.Contains(includeIds, user.ID) {
+			viewUsers = append(viewUsers, UserMapper(user))
+		} else {
+			viewUsers = append(viewUsers, UserWithoutPositionMapper(user))
+		}
+	}
+
+	return viewUsers
+}
+
+func ShareGroupMapper(shareGroup *database.ShareGroup, includeIds []uint) *pb.ShareGroup {
 	if shareGroup == nil {
 		return nil
 	}
@@ -64,9 +102,7 @@ func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
 		MeetingTime:              shareGroup.MeetingTime,
 		InviteUrl:                fmt.Sprintf("mesh://invite/%s", shareGroup.LinkKey),
 		Address:                  shareGroup.Address,
-		Users:                    UserListMapper(shareGroup.Users),
 		SharingLocationStartTime: shareGroup.SharingLocationStartTime,
-		AdminUser:                UserMapper(&shareGroup.AdminUser),
 	}
 
 	if shareGroup.SharingLocationStartTime != nil {
@@ -76,6 +112,14 @@ func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
 		} else {
 			log.Println(err)
 		}
+	}
+
+	if viewShareGroup.IsSharingLocation {
+		viewShareGroup.Users = UserListMapper(shareGroup.Users)
+		viewShareGroup.AdminUser = UserMapper(&shareGroup.AdminUser)
+	} else {
+		viewShareGroup.Users = UserWithoutPositionListMapper(shareGroup.Users, includeIds)
+		viewShareGroup.AdminUser = UserWithoutPositionMapper(&shareGroup.AdminUser)
 	}
 
 	return viewShareGroup
@@ -89,25 +133,25 @@ func AnonymousSignUpResponseMapper(user *database.User, accessToken string) *pb.
 
 func CreateShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.CreateShareGroupResponse {
 	return &pb.CreateShareGroupResponse{
-		ShareGroup: ShareGroupMapper(shareGroup),
+		ShareGroup: ShareGroupMapper(shareGroup, []uint{}),
 	}
 }
 
 func JoinShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.JoinShareGroupResponse {
 	return &pb.JoinShareGroupResponse{
-		ShareGroup: ShareGroupMapper(shareGroup),
+		ShareGroup: ShareGroupMapper(shareGroup, []uint{}),
 	}
 }
 
 func GetShareGroupLinkKeyResponseMapper(shareGroup *database.ShareGroup) *pb.GetShareGroupByLinkKeyResponse {
 	return &pb.GetShareGroupByLinkKeyResponse{
-		ShareGroup: ShareGroupMapper(shareGroup),
+		ShareGroup: ShareGroupMapper(shareGroup, []uint{}),
 	}
 }
 
-func GetCurrentShareGroupResponseMapper(shareGroup *database.ShareGroup) *pb.GetCurrentShareGroupResponse {
+func GetCurrentShareGroupResponseMapper(shareGroup *database.ShareGroup, currentUserID uint) *pb.GetCurrentShareGroupResponse {
 	return &pb.GetCurrentShareGroupResponse{
-		ShareGroup: ShareGroupMapper(shareGroup),
+		ShareGroup: ShareGroupMapper(shareGroup, []uint{currentUserID}),
 	}
 }
 
