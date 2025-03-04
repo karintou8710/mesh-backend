@@ -14,6 +14,8 @@ message ShareGroup {
     string inviteUrl = 7;
     string address = 8;
     User adminUser = 9;
+    bool isSharingLocation = 10;
+    optional string sharingLocationStartTime = 11;
 }
 
 message User {
@@ -44,6 +46,7 @@ message CreateShareGroupRequest {
     double destLat = 2;
     string meetingTime = 3;
     string address = 4;
+    optional string sharingLocationStartTime = 5;
 }
 
 message CreateShareGroupResponse {

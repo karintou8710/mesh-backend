@@ -24,14 +24,15 @@ type User struct {
 
 type ShareGroup struct {
 	gorm.Model
-	LinkKey     string
-	DestLon     float64
-	DestLat     float64
-	MeetingTime string
-	Address     string
-	AdminUserID uint64
-	AdminUser   User
-	Users       []*User
+	LinkKey                  string
+	DestLon                  float64
+	DestLat                  float64
+	MeetingTime              string
+	Address                  string
+	AdminUserID              uint64
+	SharingLocationStartTime *string
+	AdminUser                User
+	Users                    []*User
 }
 
 var globalDB *gorm.DB
