@@ -32,6 +32,8 @@ type ServiceClient interface {
 	LeaveShareGroup(ctx context.Context, in *LeaveShareGroupRequest, opts ...grpc.CallOption) (*LeaveShareGroupResponse, error)
 	ArriveDest(ctx context.Context, in *ArriveDestRequest, opts ...grpc.CallOption) (*ArriveDestResponse, error)
 	UpdateShortMessage(ctx context.Context, in *UpdateShortMessageRequest, opts ...grpc.CallOption) (*UpdateShortMessageResponse, error)
+	// Stream対応
+	GetCurrentShareGroupServerStream(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (Service_GetCurrentShareGroupServerStreamClient, error)
 }
 
 type serviceClient struct {
@@ -132,6 +134,38 @@ func (c *serviceClient) UpdateShortMessage(ctx context.Context, in *UpdateShortM
 	return out, nil
 }
 
+func (c *serviceClient) GetCurrentShareGroupServerStream(ctx context.Context, in *GetCurrentShareGroupRequest, opts ...grpc.CallOption) (Service_GetCurrentShareGroupServerStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Service_ServiceDesc.Streams[0], "/Server.Service/GetCurrentShareGroupServerStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceGetCurrentShareGroupServerStreamClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Service_GetCurrentShareGroupServerStreamClient interface {
+	Recv() (*GetCurrentShareGroupResponse, error)
+	grpc.ClientStream
+}
+
+type serviceGetCurrentShareGroupServerStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *serviceGetCurrentShareGroupServerStreamClient) Recv() (*GetCurrentShareGroupResponse, error) {
+	m := new(GetCurrentShareGroupResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // ServiceServer is the server API for Service service.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
@@ -146,6 +180,8 @@ type ServiceServer interface {
 	LeaveShareGroup(context.Context, *LeaveShareGroupRequest) (*LeaveShareGroupResponse, error)
 	ArriveDest(context.Context, *ArriveDestRequest) (*ArriveDestResponse, error)
 	UpdateShortMessage(context.Context, *UpdateShortMessageRequest) (*UpdateShortMessageResponse, error)
+	// Stream対応
+	GetCurrentShareGroupServerStream(*GetCurrentShareGroupRequest, Service_GetCurrentShareGroupServerStreamServer) error
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -182,6 +218,9 @@ func (UnimplementedServiceServer) ArriveDest(context.Context, *ArriveDestRequest
 }
 func (UnimplementedServiceServer) UpdateShortMessage(context.Context, *UpdateShortMessageRequest) (*UpdateShortMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateShortMessage not implemented")
+}
+func (UnimplementedServiceServer) GetCurrentShareGroupServerStream(*GetCurrentShareGroupRequest, Service_GetCurrentShareGroupServerStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetCurrentShareGroupServerStream not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -376,6 +415,27 @@ func _Service_UpdateShortMessage_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_GetCurrentShareGroupServerStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetCurrentShareGroupRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ServiceServer).GetCurrentShareGroupServerStream(m, &serviceGetCurrentShareGroupServerStreamServer{stream})
+}
+
+type Service_GetCurrentShareGroupServerStreamServer interface {
+	Send(*GetCurrentShareGroupResponse) error
+	grpc.ServerStream
+}
+
+type serviceGetCurrentShareGroupServerStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *serviceGetCurrentShareGroupServerStreamServer) Send(m *GetCurrentShareGroupResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // Service_ServiceDesc is the grpc.ServiceDesc for Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -424,6 +484,12 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Service_UpdateShortMessage_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetCurrentShareGroupServerStream",
+			Handler:       _Service_GetCurrentShareGroupServerStream_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/server.proto",
 }

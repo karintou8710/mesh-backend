@@ -119,4 +119,6 @@ service Service {
     rpc LeaveShareGroup (LeaveShareGroupRequest) returns (LeaveShareGroupResponse);
     rpc ArriveDest (ArriveDestRequest) returns (ArriveDestResponse);
     rpc UpdateShortMessage (UpdateShortMessageRequest) returns (UpdateShortMessageResponse);
+    // Stream対応
+    rpc GetCurrentShareGroupServerStream (GetCurrentShareGroupRequest) returns (stream GetCurrentShareGroupResponse);
 }
