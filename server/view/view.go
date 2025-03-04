@@ -103,6 +103,7 @@ func ShareGroupMapper(shareGroup *database.ShareGroup, includeIds []uint) *pb.Sh
 		InviteUrl:                fmt.Sprintf("mesh://invite/%s", shareGroup.LinkKey),
 		Address:                  shareGroup.Address,
 		SharingLocationStartTime: shareGroup.SharingLocationStartTime,
+		IsSharingLocation:        true,
 	}
 
 	if shareGroup.SharingLocationStartTime != nil {
