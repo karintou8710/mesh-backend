@@ -100,7 +100,7 @@ func ShareGroupMapper(shareGroup *database.ShareGroup, includeIds []uint) *pb.Sh
 		DestLat:                  shareGroup.DestLat,
 		LinkKey:                  shareGroup.LinkKey,
 		MeetingTime:              shareGroup.MeetingTime,
-		InviteUrl:                fmt.Sprintf("mesh://invite/%s", shareGroup.LinkKey),
+		InviteUrl:                fmt.Sprintf("https://redirect-project-ashy.vercel.app/invite/%s", shareGroup.LinkKey),
 		Address:                  shareGroup.Address,
 		SharingLocationStartTime: shareGroup.SharingLocationStartTime,
 		IsSharingLocation:        true,
