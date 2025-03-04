@@ -2,8 +2,10 @@ package view
 
 import (
 	"fmt"
+	"log"
 	"main/database"
 	pb "main/go_protocol_buffer"
+	"main/server/utils"
 )
 
 func UserMapper(user *database.User) *pb.User {
@@ -54,17 +56,29 @@ func ShareGroupMapper(shareGroup *database.ShareGroup) *pb.ShareGroup {
 		return nil
 	}
 
-	return &pb.ShareGroup{
-		Id:          uint64(shareGroup.ID),
-		DestLon:     shareGroup.DestLon,
-		DestLat:     shareGroup.DestLat,
-		LinkKey:     shareGroup.LinkKey,
-		MeetingTime: shareGroup.MeetingTime,
-		InviteUrl:   fmt.Sprintf("mesh://invite/%s", shareGroup.LinkKey),
-		Address:     shareGroup.Address,
-		Users:       UserListMapper(shareGroup.Users),
-		AdminUser:   UserMapper(&shareGroup.AdminUser),
+	viewShareGroup := &pb.ShareGroup{
+		Id:                       uint64(shareGroup.ID),
+		DestLon:                  shareGroup.DestLon,
+		DestLat:                  shareGroup.DestLat,
+		LinkKey:                  shareGroup.LinkKey,
+		MeetingTime:              shareGroup.MeetingTime,
+		InviteUrl:                fmt.Sprintf("mesh://invite/%s", shareGroup.LinkKey),
+		Address:                  shareGroup.Address,
+		Users:                    UserListMapper(shareGroup.Users),
+		SharingLocationStartTime: shareGroup.SharingLocationStartTime,
+		AdminUser:                UserMapper(&shareGroup.AdminUser),
 	}
+
+	if shareGroup.SharingLocationStartTime != nil {
+		sharingLocationStartTime, err := utils.ParseISO8601(*shareGroup.SharingLocationStartTime)
+		if err == nil {
+			viewShareGroup.IsSharingLocation = utils.IsPastTime(sharingLocationStartTime)
+		} else {
+			log.Println(err)
+		}
+	}
+
+	return viewShareGroup
 }
 
 func AnonymousSignUpResponseMapper(user *database.User, accessToken string) *pb.AnonymousSignUpResponse {
