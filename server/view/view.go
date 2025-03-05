@@ -32,6 +32,17 @@ func UserWithoutPositionMapper(user *database.User) *pb.User {
 	return viewUser
 }
 
+func AdminUserMapper(user *database.User) *pb.AdminUser {
+	if user == nil {
+		return nil
+	}
+
+	return &pb.AdminUser{
+		Id:   uint64(user.ID),
+		Name: user.Name,
+	}
+}
+
 func UserMapper(user *database.User) *pb.User {
 	if user == nil {
 		return nil
@@ -104,6 +115,7 @@ func ShareGroupMapper(shareGroup *database.ShareGroup, includeIds []uint) *pb.Sh
 		Address:                  shareGroup.Address,
 		SharingLocationStartTime: shareGroup.SharingLocationStartTime,
 		IsSharingLocation:        true,
+		AdminUser:                AdminUserMapper(&shareGroup.AdminUser),
 	}
 
 	if shareGroup.SharingLocationStartTime != nil {
@@ -117,10 +129,8 @@ func ShareGroupMapper(shareGroup *database.ShareGroup, includeIds []uint) *pb.Sh
 
 	if viewShareGroup.IsSharingLocation {
 		viewShareGroup.Users = UserListMapper(shareGroup.Users)
-		viewShareGroup.AdminUser = UserMapper(&shareGroup.AdminUser)
 	} else {
 		viewShareGroup.Users = UserWithoutPositionListMapper(shareGroup.Users, includeIds)
-		viewShareGroup.AdminUser = UserWithoutPositionMapper(&shareGroup.AdminUser)
 	}
 
 	return viewShareGroup

@@ -78,7 +78,10 @@ func UpdateShortMessage(db *gorm.DB, user *database.User, shortMessage *string) 
 }
 
 func LeaveShareGroup(db *gorm.DB, user *database.User) error {
-	err := db.Delete(user).Error
+	user.ShareGroup = nil
+	user.ShareGroupID = nil
+
+	err := db.Save(user).Error
 	if err != nil {
 		log.Printf("Error: %v\n", err)
 		return err

@@ -13,7 +13,7 @@ message ShareGroup {
     string meetingTime = 6;
     string inviteUrl = 7;
     string address = 8;
-    User adminUser = 9;
+    AdminUser adminUser = 9;
     bool isSharingLocation = 10;
     optional string sharingLocationStartTime = 11;
 }
@@ -29,6 +29,11 @@ message User {
     optional string positionAt = 8;
     optional string shortMessage = 9;
     string iconID = 10;
+}
+
+message AdminUser {
+    uint64 id = 1;
+    string name = 2;
 }
 
 message AnonymousSignUpRequest {
